@@ -1,0 +1,51 @@
+<div class="dcp-input dcp-autocomplete asset-navigator-combobox">
+  <mat-form-field class="asset-navigator-combobox__field" appearance="fill" 
+                  subscriptSizing="dynamic">
+    <mat-label>{{ getLabel(multiple ? 'select-sensors' : 'select-sensor') }}</mat-label>
+
+    <ng-container *ngIf="multiple; else singleInput">
+      <mat-chip-grid #chipGrid [disabled]="isLoading">
+        <mat-chip-row *ngFor="let option of selectedOptions;" 
+                      (removed)="removeValue(option.value)">
+          {{ option.label }}
+        </mat-chip-row>
+      </mat-chip-grid>
+      <input [formControl]="searchControl" 
+             [matChipInputFor]="chipGrid" 
+             [matAutocomplete]="auto" autocomplete="off" />
+    </ng-container>
+
+    <ng-template #singleInput>
+      <input matInput 
+             [formControl]="searchControl" 
+             [matAutocomplete]="auto" 
+             autocomplete="off" />
+    </ng-template>
+
+    <button *ngIf="clearable && hasSelection; else dropdownIcon"
+            matSuffix
+            mat-icon-button
+            type="button"
+            aria-label="Clear"
+            (click)="clear($event)">
+      <mat-icon>close</mat-icon>
+    </button>
+    <ng-template #dropdownIcon>
+      <mat-icon matSuffix>arrow_drop_down</mat-icon>
+    </ng-template>
+
+    <mat-autocomplete #auto="matAutocomplete" 
+                      (optionSelected)="onOptionSelected($event)" 
+                      (closed)="restoreDisplayText()">
+      <mat-option *ngIf="!filteredOptions.length" [disabled]="true">
+        No data available
+      </mat-option>
+      <mat-option *ngFor="let option of filteredOptions;"
+                  [value]="option.value"
+                  [disabled]="option.disabled"
+                  [class.asset-navigator-combobox__option--selected]="isOptionSelected(option)">
+        <odcp-sensor-selector-item [item]="option" [disabled]="option.disabled ?? false" />
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</div>

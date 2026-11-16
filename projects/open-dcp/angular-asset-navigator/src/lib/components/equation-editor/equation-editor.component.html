@@ -1,0 +1,22 @@
+<ng-container *ngFor="let key of [editorInstanceKey]">
+  <odcp-equation-editor class="odcp-asset-equation-editor-instance"
+                        [modelValue]="equation"
+                        [variables]="variables"
+                        [functions]="functions ?? noFunctions"
+                        [operators]="operators ?? noOperators"
+                        [ignoreDescription]="ignoreDescription ?? defaultDescriptionVisibility"
+                        [translation]="translation"
+                        [fence]="fence"
+                        (copyClick)="copy.emit()"
+                        (errorsChange)="handleError($event)"
+                        (modelValueChange)="onEquationChange($event)" />
+</ng-container>
+
+<div class="odcp-asset-equation-editor-buttons">
+  <button *ngIf="allowCancel" mat-button type="button" (click)="cancel.emit()">
+    {{ getLabel('cancel') }}
+  </button>
+  <odcp-default-button [disabled]="hasEquationErrors" (click)="apply.emit(equation)">
+    {{ getLabel('apply-formula') }}
+  </odcp-default-button>
+</div>

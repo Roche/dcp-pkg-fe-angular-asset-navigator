@@ -1,0 +1,40 @@
+<div class="asset-navigator-levels-row">
+  <odcp-asset-navigator-skeleton *ngIf="showSkeleton; else editorContainer" 
+                                  [items]="nbrSkeletonItems" />
+  <ng-template #editorContainer>
+    <div class="asset-navigator">
+      <odcp-level-selector *ngFor="let level of noneSensorLevels; index as index;"
+                            [label]="getLevelLabel(level.levelType, index)"
+                            [options]="level.options"
+                            [isLoading]="isLoading"
+                            [selectedValue]="level.value"
+                            [device]="device"
+                            [multiple]="multiple"
+                            [clearable]="clearable"
+                            [clearableFinalStep]="clearableFinalStep"
+                            [disabledIds]="disabledIds"
+                            [hideDisabledIds]="hideDisabledIds"
+                            (select)="levelSelected(index, $event)"
+                            (cleared)="onLevelCleared(index)" />
+    </div>
+    <odcp-editor-final-step *ngIf="sensorLevel as level"
+                            [supportFormula]="effectiveSupportFormula"
+                            [formulaOnly]="formulaOnly"
+                            [isLoading]="isLoading"
+                            [multiple]="multiple"
+                            [clearable]="clearable"
+                            [sensors]="level.options"
+                            [functions]="formulaFunctions"
+                            [operators]="formulaOperators"
+                            [translation]="translation"
+                            [equationResetToken]="effectiveEquationResetToken"
+                            [fence]="fence"
+                            [disabledIds]="disabledIds"
+                            [hideDisabledIds]="hideDisabledIds"
+                            [selectedSensorValues]="selectedSensorValues"
+                            (selectedSensorValuesChange)="onSelectedSensorValuesChange($event)"
+                            (formulaApply)="onFormulaApply($event)"
+                            (clearSensors)="onClearSensors()"
+                            (copy)="formulaCopied.emit()" />
+  </ng-template>
+</div>

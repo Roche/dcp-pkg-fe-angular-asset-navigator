@@ -1,0 +1,41 @@
+<div class="editor-final-step">
+  <odcp-sensor-selector *ngIf="!isFormulaEditorVisible"
+                        [translation]="translation"
+                        [multiple]="multiple"
+                        [options]="sensors"
+                        [isLoading]="isLoading"
+                        [clearable]="clearable"
+                        [disabledIds]="disabledIds"
+                        [hideDisabledIds]="hideDisabledIds"
+                        [selectedSensorValues]="selectedSensorValues"
+                        (selectedSensorValuesChange)="onSelectedSensorValuesChange($event)" />
+  <button *ngIf="clearable"
+          class="clear-sensors-button"
+          mat-button
+          type="button"
+          (click)="clearSensors.emit()">
+    {{ getLabel('clear-sensors') }}
+  </button>
+  <button *ngIf="supportFormula && !isFormulaEditorVisible"
+          class="activate-formula-button"
+          mat-button
+          type="button"
+          (click)="formulaModeEnabled = true">
+    {{ getLabel('define-formula') }}
+  </button>
+</div>
+
+<div class="editor-editor-container">
+  <odcp-asset-equation-editor *ngIf="supportFormula && isFormulaEditorVisible"
+                              [translation]="translation"
+                              [fence]="fence"
+                              [options]="formulaOptions"
+                              [functions]="functions"
+                              [operators]="operators"
+                              [ignoreDescription]="ignoreDescription"
+                              [allowCancel]="!formulaOnly"
+                              [resetToken]="equationResetToken"
+                              (cancel)="onFormulaCancel()"
+                              (apply)="formulaApply.emit($event)"
+                              (copy)="copy.emit()" />
+</div>
